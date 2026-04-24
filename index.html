@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maho — Teaching you scripting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --glass-bg: rgba(10, 10, 15, 0.52);
+      --glass-border: rgba(255,255,255,0.09);
+      --glass-blur: blur(22px);
+      --accent: #6251ff;
+      --accent-dim: rgba(200,169,110,0.18);
+      --text: #e8e4dc;
+      --muted: rgba(232,228,220,0.55);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: #080810;
+      overflow-x: hidden;
+    }
+
+    /* ─── PARALLAX SECTIONS ─────────────────────────────── */
+    .parallax-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      inset: -15%;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      will-change: transform;
+      z-index: 0;
+    }
+
+    /* Section backgrounds */
+    #hero .parallax-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(5,5,12,0.35) 0%, rgba(5,5,12,0.6) 100%),
+        url('https://i.imgur.com/7PGrh8w.png');
+    }
+    #section2 .parallax-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(5,5,12,0.45) 0%, rgba(5,5,12,0.65) 100%),
+        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85');
+    }
+    #section3 .parallax-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(5,5,12,0.4) 0%, rgba(5,5,12,0.6) 100%),
+        url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1800&q=85');
+    }
+    #section4 .parallax-bg {
+      background-image:
+        linear-gradient(to bottom, rgba(5,5,12,0.4) 0%, rgba(5,5,12,0.7) 100%),
+        url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1800&q=85');
+    }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    #hero {
+      text-align: center;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.6rem;
+      padding: 3rem 2rem;
+    }
+
+    .eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.3s ease forwards;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s ease forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 460px;
+      line-height: 1.75;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s ease forwards;
+    }
+
+    /* Download Button */
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: 100px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeUp 1s 1.1s ease forwards;
+    }
+
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .download-btn:hover::before { opacity: 1; }
+    .download-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 28px rgba(200,169,110,0.18), 0 4px 24px rgba(0,0,0,0.4);
+      transform: translateY(-2px);
+    }
+
+    .download-btn svg {
+      width: 16px; height: 16px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.3s;
+    }
+    .download-btn:hover svg { transform: translateY(2px); }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s 2s ease forwards;
+    }
+    .scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s 2.5s ease-in-out infinite;
+    }
+
+    /* ─── INFO SECTIONS ─────────────────────────────────── */
+    .content-section {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .section-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    /* Glass card */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      padding: 2.8rem 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,169,110,0.4), transparent);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      border-radius: 100px;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .glass-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      color: #fff;
+    }
+
+    .glass-card p {
+      font-size: 0.97rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .card-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+      margin: 1.5rem 0;
+      opacity: 0.6;
+    }
+
+    /* Section images */
+    .section-image {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4/3;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    .section-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      pointer-events: none;
+    }
+
+    .section-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .section-image:hover img { transform: scale(1.04); }
+
+    /* ─── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(8,8,16,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── FOOTER ────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--glass-border);
+      background: rgba(5,5,12,0.8);
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── ANIMATIONS ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 0.6; }
+      50%       { transform: scaleY(0.6); opacity: 1; }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay { transition-delay: 0.2s; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .section-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .section-inner.reverse { direction: ltr; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">Ma<span>h</span>o</a>
+    <ul class="nav-links">
+      <li><a href="#section2">Why Script-X?</a></li>
+      
+      <li><a href="#section4">Installtion guide</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="parallax-section" id="hero">
+    <div class="parallax-bg"></div>
+
+    <div class="hero-inner">
+      <span class="eyebrow">Est. 2026, 3/29 · Launch date</span>
+      <h1>Easy,<br>Fast,<em>Effective.</em></h1>
+      <p class="hero-sub">Run scripts without problems!</p>
+
+      <a class="download-btn" href="https://cdn.discordapp.com/attachments/1424469562665074943/1497024106388914206/beta.rar?ex=69ec03d8&is=69eab258&hm=6b67dcc345d933c9a3d774c6a076902641df7ba26131f487cbafb0cdf826c5a7&" target="_blank">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 3v13M5 16l7 7 7-7"/>
+    <path d="M3 21h18"/>
+  </svg>
+  Download today!
+</a>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2 ── -->
+  <section class="parallax-section" id="section2">
+    <div class="parallax-bg"></div>
+    <div class="content-section">
+      <div class="section-inner">
+        <div class="glass-card reveal">
+          <span class="card-tag">Why Maho?</span>
+          <h2>Stablity</h2>
+          <div class="card-divider"></div>
+          <p>Unlike other executors, We will try to maintain our executor for long as possible</p>
+          <p style="margin-top:1rem;">Powered by VelocityAPI</p>
+        </div>
+        <div class="section-image reveal reveal-delay">
+          <img src="https://i.imgur.com/V7OguiT.png" alt="Mountain peak at golden hour" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4 ── -->
+  <section class="parallax-section" id="section4">
+    <div class="parallax-bg"></div>
+    <div class="content-section">
+      <div class="section-inner">
+        <div class="glass-card reveal">
+          <span class="card-tag">Installtion guide.</span>
+          <h2>Installtion <em style="font-family:'Cormorant Garamond',serif;">Guide</em></h2>
+          <div class="card-divider"></div>
+          <p>To install Maho (Formerly known as Script-X and before that slime). It is quite simple.</p>
+          <p style="margin-top:1rem;">Disable your anti-virus by turning off real-time protection.</p>
+          <p style="margin-top:1rem;">Why do you need to turn it off? Because of a thing called false postives! A false postive is when an Anti-Virus falsly identifies when a file is a virus.</p>
+          <p style="margin-top:1rem;">Extract the .rar file using WinRAR or other tools, and open up the "Launcher.exe" file. It will give you a prompt, just select yes.</p>
+          <p style="margin-top:1rem;">Open roblox, press the paperclip Icon and your injected and free to execute whatever!</p>
+          <div class="card-divider"></div>
+          <a class="download-btn" href="https://cdn.discordapp.com/attachments/1424469562665074943/1497024106388914206/beta.rar?ex=69ec03d8&is=69eab258&hm=6b67dcc345d933c9a3d774c6a076902641df7ba26131f487cbafb0cdf826c5a7&" target="_blank">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 3v13M5 16l7 7 7-7"/>
+    <path d="M3 21h18"/>
+  </svg>
+  Download today!
+</a>
+        </div>
+        <div class="section-image reveal reveal-delay">
+          <img src="https://i.imgur.com/V7OguiT.png" alt="Road through landscape" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+
+  
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Horizon Exploration Series &nbsp;·&nbsp; All rights reserved</p>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
