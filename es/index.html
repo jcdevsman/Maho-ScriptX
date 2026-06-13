@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orion</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --gray-100: #fafafa;
+            --gray-200: #eaeaea;
+            --gray-800: #333333;
+            --gray-900: #111111;
+            --accent-1: #007cf0;
+            --accent-2: #00dfd8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--gray-200);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-up {
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            border-bottom: 1px solid var(--gray-800);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--fg);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--fg), var(--gray-800));
+            border-radius: 50%;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 120px 24px 80px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--gray-800);
+            border-radius: 999px;
+            font-size: 0.875rem;
+            color: var(--gray-200);
+            margin-bottom: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: border 0.2s ease;
+        }
+
+        .pill:hover {
+            border-color: var(--gray-200);
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            color: var(--fg);
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #3434eb, #e134eb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--fg);
+            color: var(--bg);
+            border: 1px solid var(--fg);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--fg);
+            border: 1px solid var(--gray-800);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--fg);
+            background-color: var(--gray-900);
+        }
+
+        /* --- Interactive Terminal --- */
+        .terminal-container {
+            max-width: 800px;
+            margin: 0 auto 100px;
+            padding: 0 24px;
+        }
+
+        .terminal {
+            background: #000;
+            border: 1px solid var(--gray-800);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(0, 124, 240, 0.15);
+        }
+
+        .terminal-header {
+            background: #0a0a0a;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-800);
+            display: flex;
+            gap: 8px;
+        }
+
+        .circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gray-800);
+        }
+
+        .terminal-body {
+            padding: 24px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9rem;
+            color: #4af626;
+            text-align: left;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: #4af626;
+            vertical-align: middle;
+            animation: pulse 1s infinite;
+        }
+
+        /* --- Features Grid (Interactive) --- */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto 100px;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        /* Interactive Card Magic */
+        .card {
+            background-color: rgba(17, 17, 17, 0.5);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #555;
+        }
+
+        /* Spotlight effect pseudo-element */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card h3 {
+            color: var(--fg);
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            Orion
+        </div>
+        <div>
+            <a href="#" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">Login</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="pill animate-up">Orion is currently down for maintenance 🔴</div>
+        <h1 class="animate-up delay-1"><br><span class="gradient-text">Orion</span></h1>
+        <p class="animate-up delay-2">Orion was built from the ground up to execute scripts. With the Most Powerful .dll there currently is in the pc executor market.</p>
+        <div class="button-group animate-up delay-3">
+            <a href="https://discord.gg/hWvkXBYGCk" class="btn btn-primary">Start Executing</a>
+            <a href="#" class="btn btn-secondary">Docs coming</a>
+        </div>
+    </header>
+
+    <div class="terminal-container animate-up delay-3">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="circle" style="background: #ff5f56;"></div>
+                <div class="circle" style="background: #ffbd2e;"></div>
+                <div class="circle" style="background: #27c93f;"></div>
+            </div>
+            <div class="terminal-body">
+                ~ $ curl -O https://orionlinux.xyz/install<br>
+                <span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="card animate-up">
+            <div class="card-content">
+                <h3>Nuestro objetivo es la potencia.</h3>
+                <p>Orion es el ejecutor de PC más potente que puedes obtener actualmente después de byfront.</p>
+            </div>
+        </div>
+        <div class="card animate-up delay-1">
+            <div class="card-content">
+                <h3>Sin vulnerabilidades</h3>
+                <p>Actualmente, no existen vulnerabilidades en Orion, ni las habrá en el futuro.</p>
+            </div>
+        </div>
+        <div class="card animate-up delay-2">
+            <div class="card-content">
+                <h3>Inducción completa</h3>
+                <p>A día de hoy, Orion permanece totalmente indetectable, a la vez que sigue siendo potente.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Interactive Spotlight Glow Effect for Cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+
+</body>
+</html>
